@@ -84,12 +84,12 @@ public class Controller2D {
     }
 
     public void cross(int x, int y){
-        panel.getRaster().setRGB(x, y, 0xff0000);
+        panel.getRaster().setPixel(x, y, 0xff0000);
         for(int i = 1; i < 3; i++){
-            panel.getRaster().setRGB(x+i,y+i,0xff0000);
-            panel.getRaster().setRGB(x-i,y-i,0xff0000);
-            panel.getRaster().setRGB(x-i,y+i,0xff0000);
-            panel.getRaster().setRGB(x+i,y-i,0xff0000);
+            panel.getRaster().setPixel(x+i,y+i,0xff0000);
+            panel.getRaster().setPixel(x-i,y-i,0xff0000);
+            panel.getRaster().setPixel(x-i,y+i,0xff0000);
+            panel.getRaster().setPixel(x+i,y-i,0xff0000);
         }
         panel.repaint();
     }

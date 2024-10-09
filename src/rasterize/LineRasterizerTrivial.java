@@ -1,15 +1,16 @@
 package rasterize;
 
 import model.Line;
+import raster.Raster;
 
 import java.awt.image.BufferedImage;
 
 public class LineRasterizerTrivial extends LineRasterizer{
-    public LineRasterizerTrivial(BufferedImage raster) {
+    public LineRasterizerTrivial(Raster raster) {
         super(raster);
     }
 
-    public LineRasterizerTrivial(BufferedImage raster, int color) {
+    public LineRasterizerTrivial(Raster raster, int color) {
         super(raster, color);
     }
 
@@ -30,7 +31,7 @@ public class LineRasterizerTrivial extends LineRasterizer{
             }
             for (int i = x1; i <= x2; i++) {
                 float y = k * i + q;
-                raster.setRGB(i, Math.round(y), color);
+                raster.setPixel(i, Math.round(y), color);
             }
         } else{
             if (y1>y2) {
@@ -40,7 +41,7 @@ public class LineRasterizerTrivial extends LineRasterizer{
             }
             for (int i = y1; i <= y2; i++) {
                 float x = (i-q)/k;
-                raster.setRGB(Math.round(x), i, color);
+                raster.setPixel(Math.round(x), i, color);
             }
         }
 

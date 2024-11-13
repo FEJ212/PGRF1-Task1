@@ -1,5 +1,5 @@
 package raster;
-
+    //Interface pro RasterBufferedImage
 public interface Raster {
     void setPixel(int x, int y, int value);
     int getPixel(int x, int y);

@@ -1,14 +1,19 @@
 package model;
-
+//vlastní datový typ pro zaznamenání všech potřebných hodnot k zaznamenání bodu
 public class Point {
 
-    private final Point point;
-
+    private final int x,y;
+    //konstruktor
     public Point(int x, int y) {
-        point = new Point(x, y);
+        this.x = x;
+        this.y = y;
     }
-    public Point getPoint(){
-        return point;
+    //gettery
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
     }
 }
 

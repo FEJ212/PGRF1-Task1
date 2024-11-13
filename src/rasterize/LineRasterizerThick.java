@@ -2,14 +2,14 @@ package rasterize;
 
 import model.Line;
 import raster.Raster;
-//Algoritmus pro vlastní rasterizaci čáry
-public class LineRasterizerTrivial extends LineRasterizer{
+//Algoritmus pro vlastní rasterizaci tučné čáry
+public class LineRasterizerThick extends LineRasterizer{
     //konstruktor bez specifikování barvy
-    public LineRasterizerTrivial(Raster raster) {
+    public LineRasterizerThick(Raster raster) {
         super(raster);
     }
     //konstruktor se specifickou barvou
-    public LineRasterizerTrivial(Raster raster, int color) {
+    public LineRasterizerThick(Raster raster, int color) {
         super(raster, color);
     }
     //rasterizace čáry
@@ -37,6 +37,10 @@ public class LineRasterizerTrivial extends LineRasterizer{
                 for (int i = x1; i <= x2; i++) {
                     float y = k * i + q;
                     raster.setPixel(i, Math.round(y), color);
+                    raster.setPixel(i, Math.round(y) + 2, color);
+                    raster.setPixel(i, Math.round(y) + 1, color);
+                    raster.setPixel(i, Math.round(y) - 1, color);
+                    raster.setPixel(i, Math.round(y) - 2, color);
                 }
             //vykreslování přes hodnotu y
             } else {
@@ -50,10 +54,14 @@ public class LineRasterizerTrivial extends LineRasterizer{
                 for (int i = y1; i <= y2; i++) {
                     float x = (i - q) / k;
                     raster.setPixel(Math.round(x), i, color);
+                    raster.setPixel(Math.round(x) + 1, i, color);
+                    raster.setPixel(Math.round(x) + 2, i, color);
+                    raster.setPixel(Math.round(x) - 1, i, color);
+                    raster.setPixel(Math.round(x) - 2, i, color);
                 }
             }
         //vykreslování svislých čar (zamezení dělení nulou)
-        } else {
+        }else {
             //zajištění že y1 bude menší než y2, abychom mohli čáru vykreslovat skrz jeden for loop místo dvou
             if (y1 > y2) {
                 int tmp = y2;
@@ -63,8 +71,11 @@ public class LineRasterizerTrivial extends LineRasterizer{
             //vykreslovací cyklus
             for (int i = y1; i <= y2; i++) {
                 raster.setPixel(x1, i, color);
+                raster.setPixel(x1+1, i, color);
+                raster.setPixel(x1+2, i, color);
+                raster.setPixel(x1-1, i, color);
+                raster.setPixel(x1-2, i, color);
             }
         }
-
     }
 }

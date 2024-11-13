@@ -3,6 +3,7 @@ package controller;
 import clip.Clipper;
 import fill.*;
 import model.Line;
+import model.Pentagon;
 import model.Point;
 import model.Polygon;
 import rasterize.*;
@@ -29,6 +30,7 @@ public class Controller2D {
     private ArrayList<Point> pointsThick = new ArrayList<>(); //zaznamenávání nakreslených tučných bodů
     private boolean thick = false; //Hodnota pro přepínání mezi normálními a tlustými čarami
     private boolean snap = false; //Hodnota pro přepínání mezi normálním režimem, nebo režimem rovných čar
+    private boolean scanline = false;
     private Point hPoint = new Point(0,0); //pomocná proměnná pro vypočítání sklonu pro line snapping => držení tlačítka shift
     private int color = 0xb00b69;
     private Line lineClipper;
@@ -108,7 +110,11 @@ public class Controller2D {
                           lines.add(line);
                       }
                   }
-
+              } else if (mode == 4){
+                Pentagon pentagon = new Pentagon();
+                pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                polygonRasterizer.rasterize(pentagon);
+                polygons.add(pentagon);
               }
               panel.repaint();
           }
@@ -198,6 +204,8 @@ public class Controller2D {
                         Line line2 = new Line(polygon.getPoint(pp-1).getX(), polygon.getPoint(pp-1).getY(), e.getX(), e.getY());
                         lineRasterizer.drawLine(line2);
                     }
+                } else if (mode == 4) {
+
                 }
                 panel.repaint();
             }
@@ -297,16 +305,25 @@ public class Controller2D {
                         panel.repaint();
                         break;
                     case'f':
-                        //uložení rozdělaného polygonu
+                        //přepnutí režimu a vypsání zprávy o provedení do konzole
+                        if (!scanline) {
+                            scanline = true;
+                            System.out.println("ScanLine on");
+                        } else {
+                            scanline = false;
+                            System.out.println("ScanLine off");
+                        }
+                        break;
+                    case'o':
                         if (thick){
                             polygonsThick.add(polygon);
                         } else {
                             polygons.add(polygon);
                         }
                         polygon = new Polygon();
-                        //přepnutí režimu a vypsání zprávy o provedení do konzole
-                        mode = 50;
-                        System.out.println("SeedFill");
+                        mode = 4;
+                        System.out.println("pentagon mód");
+                        break;
                 }
             }
             //detekce zmáčknutého shiftu pro zapnutí line snappingu

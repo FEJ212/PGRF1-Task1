@@ -40,6 +40,7 @@ public class Controller2D {
     1: Line Trivial
     2: Polygon - defaultní režim
     3: Line Graphics
+    4: Pentagon
     25: line snapping
     */
     private int mode = 2;
@@ -113,8 +114,9 @@ public class Controller2D {
               } else if (mode == 4){
                   Pentagon pentagon = new Pentagon();
                   pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                  polygonRasterizer.rasterize(pentagon);
-                  polygons.add(pentagon);
+                  Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
+                  polygonRasterizer.rasterize(polygon);
+                  polygons.add(polygon);
               }
               panel.repaint();
           }
@@ -207,7 +209,8 @@ public class Controller2D {
                 } else if (mode == 4) {
                     Pentagon pentagon = new Pentagon();
                     pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                    polygonRasterizer.rasterize(pentagon);
+                    Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
+                    polygonRasterizer.rasterize(polygon);
                 }
                 panel.repaint();
             }

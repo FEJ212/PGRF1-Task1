@@ -111,10 +111,10 @@ public class Controller2D {
                       }
                   }
               } else if (mode == 4){
-                Pentagon pentagon = new Pentagon();
-                pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                polygonRasterizer.rasterize(pentagon);
-                polygons.add(pentagon);
+                  Pentagon pentagon = new Pentagon();
+                  pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                  polygonRasterizer.rasterize(pentagon);
+                  polygons.add(pentagon);
               }
               panel.repaint();
           }
@@ -205,7 +205,9 @@ public class Controller2D {
                         lineRasterizer.drawLine(line2);
                     }
                 } else if (mode == 4) {
-
+                    Pentagon pentagon = new Pentagon();
+                    pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                    polygonRasterizer.rasterize(pentagon);
                 }
                 panel.repaint();
             }

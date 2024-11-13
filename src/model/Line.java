@@ -1,4 +1,7 @@
 package model;
+
+import transforms.Point3D;
+
 //vlastní datový typ pro zaznamenání všech potřebných hodnot k zaznamenání úsečky
 public class Line {
     private final int x1, y1, x2, y2;
@@ -15,6 +18,12 @@ public class Line {
         this.y1 = a.getY();
         this.x2 = b.getX();
         this.y2 = b.getY();
+    }
+    public Line(Point3D a, Point3D b){
+        this.x1 = (int) a.getX();
+        this.y1 = (int) a.getY();
+        this.x2 = (int) b.getX();
+        this.y2 = (int) b.getY();
     }
     //gettery
     public int getX1() {

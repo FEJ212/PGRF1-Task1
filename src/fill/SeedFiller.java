@@ -2,19 +2,20 @@ package fill;
 
 import model.Point;
 import raster.Raster;
+import java.util.ArrayList;
 
 public class SeedFiller implements Filler{
 
     private Raster raster;
-    private int fillColor;
+    private int fillColor = 0xb00b69;
     private int backgroundColor;
     private int x,y;
+    private ArrayList<Point> seedFillQueue = new ArrayList<>();
 
-    public SeedFiller(Raster raster, Point point, int fillColor){
+    public SeedFiller(Raster raster, Point point){
         this.raster = raster;
         this.x = point.getX();
         this.y = point.getY();
-        this.fillColor = fillColor;
         this.backgroundColor = raster.getPixel(x,y);
     }
 
@@ -24,13 +25,19 @@ public class SeedFiller implements Filler{
     }
 
     private void seedFill(int x, int y){
-        int pixelColor = raster.getPixel(x,y);
-        if(pixelColor == backgroundColor && pixelColor != fillColor){
-            raster.setPixel(x,y,fillColor);
-            seedFill(x+1,y);
-            seedFill(x-1,y);
-            seedFill(x,y+1);
-            seedFill(x,y-1);
+        seedFillQueue.addLast(new Point(x,y));
+        while(!seedFillQueue.isEmpty()) {
+            x = seedFillQueue.getFirst().getX();
+            y = seedFillQueue.getFirst().getY();
+            int pixelColor = raster.getPixel(x, y);
+            if (pixelColor == backgroundColor && pixelColor != fillColor) {
+                raster.setPixel(x, y, fillColor);
+                if(x < raster.getWidth()-1) seedFillQueue.addLast(new Point(x+1, y));
+                if(x > 1) seedFillQueue.addLast(new Point(x-1, y));
+                if(y < raster.getHeight()-1)seedFillQueue.addLast(new Point(x, y+1));
+                if(y > 1)seedFillQueue.addLast(new Point(x, y-1));
+            }
+            seedFillQueue.removeFirst();
         }
     }
 }

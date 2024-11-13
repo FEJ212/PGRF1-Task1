@@ -3,7 +3,7 @@ package model;
 public class Pentagon extends Polygon{
     private Polygon polygon = new Polygon();
     public void calculate(Point start, Point end) {
-        int kolikaUhelnik = 5, secondAngle = 180*(kolikaUhelnik-2)/kolikaUhelnik, firstAngle = secondAngle/2;
+        int kolikaUhelnik = 5, secondAngle = (180*(kolikaUhelnik-2))/kolikaUhelnik, firstAngle = secondAngle/2;
         float r = (float) Math.sqrt((end.getX() - start.getX()) ^ 2 + (end.getY() - start.getY()) ^ 2);
         float a = (float) (r / ((Math.sqrt(50 + 10 * (Math.sqrt(5)))) / 10));
         float b,c,tmpX,tmpY;

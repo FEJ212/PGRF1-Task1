@@ -32,7 +32,6 @@ public class Controller2D {
     private boolean snap = false; //Hodnota pro přepínání mezi normálním režimem, nebo režimem rovných čar
     private boolean scanline = false;
     private Point hPoint = new Point(0,0); //pomocná proměnná pro vypočítání sklonu pro line snapping => držení tlačítka shift
-    private int color = 0xb00b69;
     private Line lineClipper;
     /*
     Modes:
@@ -59,76 +58,78 @@ public class Controller2D {
 
         panel.addMouseListener(new MouseAdapter() {
           public void mousePressed(MouseEvent e) {
-              //poznamenání počátečních hodnot x a y do proměných
-              startX = e.getX();
-              startY = e.getY();
-              //pokud se tvoří nový polygon, zaznamená se počáteční bod
-              if(mode == 2 && polygon.size() == 0){
-                  polygon.addPoint(new Point(e.getX(), e.getY()));
+              if(SwingUtilities.isRightMouseButton(e)){
+                  seedFiller = new SeedFiller(panel.getRaster(),new Point(e.getX(),e.getY()));
+                  seedFiller.fill();
+                  panel.repaint();
+              } else {
+                  //poznamenání počátečních hodnot x a y do proměných
+                  startX = e.getX();
+                  startY = e.getY();
+                  //pokud se tvoří nový polygon, zaznamená se počáteční bod
+                  if (mode == 2 && polygon.size() == 0) {
+                      polygon.addPoint(new Point(e.getX(), e.getY()));
+                  }
               }
           }
           public void mouseReleased(MouseEvent e) {
-              //Vykreslení bodu
-              if (mode==0){
-                  Point point = new Point(e.getX(), e.getY());
-                  pointRasterizer.drawPoint(point);
-                  //uložení do vhodného ArrayListu dle stavu tloušťky
-                  if(thick){
-                      pointsThick.add(point);
-                  }else {
-                      points.add(point);
-                  }
-              }
-              //vykreslení polyonu
-              if (mode == 2){
-                  Point p = new Point(e.getX(), e.getY());
-                  polygon.addPoint(p);
-                  panel.clear();
-                  repaintCanvas();
-                  polygonRasterizer.rasterize(polygon);
-              }
-              if (mode == 2 && polygon.size()>=3) {
-                  polygonRasterizer.rasterize(polygon);
-              }
-              //vykreslování úseček
-              if(mode == 1 || mode == 3) {
-                  //režim pro vodorovné, svyslé a diagonální úsečky
-                  if (snap) {
-                      Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
-                      //roztřízení tlustých a normálních úseček do odpovídajícího ArrayListu pro překreslování
+              if (!(SwingUtilities.isRightMouseButton(e))) {
+                  //Vykreslení bodu
+                  if (mode == 0) {
+                      Point point = new Point(e.getX(), e.getY());
+                      pointRasterizer.drawPoint(point);
+                      //uložení do vhodného ArrayListu dle stavu tloušťky
                       if (thick) {
-                          linesThick.add(line);
+                          pointsThick.add(point);
                       } else {
-                          lines.add(line);
-                      }
-                  //normální režim vykreslování úsečky
-                  } else {
-                      Line line = new Line(startX, startY, e.getX(), e.getY());
-                      //roztřízení tlustých a normálních úseček do odpovídajícího ArrayListu pro překreslování
-                      if (thick) {
-                          linesThick.add(line);
-                      } else {
-                          lines.add(line);
+                          points.add(point);
                       }
                   }
-              } else if (mode == 4){
-                  Pentagon pentagon = new Pentagon();
-                  pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                  Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
-                  polygonRasterizer.rasterize(polygon);
-                  polygons.add(polygon);
+                  //vykreslení polyonu
+                  if (mode == 2) {
+                      Point p = new Point(e.getX(), e.getY());
+                      polygon.addPoint(p);
+                      panel.clear();
+                      repaintCanvas();
+                      polygonRasterizer.rasterize(polygon);
+                  }
+                  if (mode == 2 && polygon.size() >= 3) {
+                      polygonRasterizer.rasterize(polygon);
+                  }
+                  //vykreslování úseček
+                  if (mode == 1 || mode == 3) {
+                      //režim pro vodorovné, svyslé a diagonální úsečky
+                      if (snap) {
+                          Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
+                          //roztřízení tlustých a normálních úseček do odpovídajícího ArrayListu pro překreslování
+                          if (thick) {
+                              linesThick.add(line);
+                          } else {
+                              lines.add(line);
+                          }
+                          //normální režim vykreslování úsečky
+                      } else {
+                          Line line = new Line(startX, startY, e.getX(), e.getY());
+                          //roztřízení tlustých a normálních úseček do odpovídajícího ArrayListu pro překreslování
+                          if (thick) {
+                              linesThick.add(line);
+                          } else {
+                              lines.add(line);
+                          }
+                      }
+                  } else if (mode == 4) {
+                      Pentagon pentagon = new Pentagon();
+                      pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                      Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
+                      polygonRasterizer.rasterize(polygon);
+                      polygons.add(polygon);
+                  }
+                  panel.repaint();
               }
-              panel.repaint();
           }
           @Override
           public void mouseClicked(MouseEvent e) {
-              if(SwingUtilities.isRightMouseButton(e)){
-                  int tmp = mode;
-                  mode = 50;
-                  seedFiller = new SeedFiller(panel.getRaster(),new Point(e.getX(),e.getY()),color);
-                  seedFiller.fill();
-                  mode = tmp;
-              }
+
           }
         });
     }
@@ -138,81 +139,83 @@ public class Controller2D {
             @Override
             //vykreslování čar při tažení myší pro lepší vizualizaci výsledné čáry
             public void mouseDragged(MouseEvent e) {
-                panel.clear();
-                repaintCanvas(); //funkce pro vykreslení předchozích čar
-                //vykreslování bodu
-                if (mode == 0){
-                    Point point = new Point(e.getX(), e.getY());
-                    pointRasterizer.drawPoint(point);
-                //vykreslování netučné čáry dle Trivial algoritmu
-                } else if(mode ==1&&!thick) {
-                    lineRasterizer = new LineRasterizerTrivial(panel.getRaster());
-                    //normální vykreslování
-                    if(!snap) {
-                        Line line = new Line(startX, startY, e.getX(), e.getY());
-                        lineRasterizer.drawLine(line);
-                    //line snapping vykreslování
-                    }else{
-                        hPoint = snapping(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                        Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
-                        lineRasterizer.drawLine(line);
+                if (!(SwingUtilities.isRightMouseButton(e))) {
+                    panel.clear();
+                    repaintCanvas(); //funkce pro vykreslení předchozích čar
+                    //vykreslování bodu
+                    if (mode == 0) {
+                        Point point = new Point(e.getX(), e.getY());
+                        pointRasterizer.drawPoint(point);
+                        //vykreslování netučné čáry dle Trivial algoritmu
+                    } else if (mode == 1 && !thick) {
+                        lineRasterizer = new LineRasterizerTrivial(panel.getRaster());
+                        //normální vykreslování
+                        if (!snap) {
+                            Line line = new Line(startX, startY, e.getX(), e.getY());
+                            lineRasterizer.drawLine(line);
+                            //line snapping vykreslování
+                        } else {
+                            hPoint = snapping(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                            Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
+                            lineRasterizer.drawLine(line);
+                        }
+                        //vykreslování netučné čáry dle algoritmu graphics
+                    } else if (mode == 3 && !thick) {
+                        lineRasterizer = new LineRasterizerGraphics(panel.getRaster());
+                        //normální vykreslování
+                        if (!snap) {
+                            Line line = new Line(startX, startY, e.getX(), e.getY());
+                            lineRasterizer.drawLine(line);
+                            //vykreslování pomocí line snapping
+                        } else {
+                            hPoint = snapping(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                            Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
+                            lineRasterizer.drawLine(line);
+                        }
+                        //vykreslování tučné čáry
+                    } else if (mode == 1 || mode == 3 && thick) {
+                        //normální vykreslování
+                        if (!snap) {
+                            lineRasterizer = new LineRasterizerThick(panel.getRaster());
+                            Line line = new Line(startX, startY, e.getX(), e.getY());
+                            lineRasterizer.drawLine(line);
+                            //vykreslování pomocí line snapping
+                        } else {
+                            lineRasterizer = new LineRasterizerThick(panel.getRaster());
+                            hPoint = snapping(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                            Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
+                            lineRasterizer.drawLine(line);
+                        }
+                        //vykreslování polygonu
+                    } else if (mode == 2) {
+                        //znovuvykreslování již nakreslených částí polygonu
+                        if (polygon.size() >= 2) polygonRasterizer.rasterize(polygon);
+                        //nastavení rasterizace dle požadavku na tučnost
+                        if (thick) {
+                            polygonRasterizer.setLineRasterizer(new LineRasterizerThick(panel.getRaster()));
+                        } else {
+                            polygonRasterizer.setLineRasterizer(new LineRasterizerTrivial(panel.getRaster()));
+                        }
+                        //vykreslení prvotní čáry (mezi prvními 2 body)
+                        if (polygon.size() < 2) {
+                            Line line = new Line(startX, startY, e.getX(), e.getY());
+                            lineRasterizer.drawLine(line);
+                            //vykreslování čar po nakreslení první čáry
+                        } else {
+                            Line line = new Line(polygon.getPoint(0).getX(), polygon.getPoint(0).getY(), e.getX(), e.getY());
+                            lineRasterizer.drawLine(line);
+                            int pp = polygon.size(); //pp = Pomocná Proměnná
+                            Line line2 = new Line(polygon.getPoint(pp - 1).getX(), polygon.getPoint(pp - 1).getY(), e.getX(), e.getY());
+                            lineRasterizer.drawLine(line2);
+                        }
+                    } else if (mode == 4) {
+                        Pentagon pentagon = new Pentagon();
+                        pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
+                        Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
+                        polygonRasterizer.rasterize(polygon);
                     }
-                //vykreslování netučné čáry dle algoritmu graphics
-                } else if (mode==3&&!thick) {
-                    lineRasterizer = new LineRasterizerGraphics(panel.getRaster());
-                    //normální vykreslování
-                    if(!snap) {
-                        Line line = new Line(startX, startY, e.getX(), e.getY());
-                        lineRasterizer.drawLine(line);
-                    //vykreslování pomocí line snapping
-                    }else{
-                        hPoint = snapping(new Point(startX, startY), new Point(e.getX(),e.getY()));
-                        Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
-                        lineRasterizer.drawLine(line);
-                    }
-                //vykreslování tučné čáry
-                } else if (mode ==1||mode==3&&thick) {
-                    //normální vykreslování
-                    if(!snap) {
-                        lineRasterizer = new LineRasterizerThick(panel.getRaster());
-                        Line line = new Line(startX, startY, e.getX(), e.getY());
-                        lineRasterizer.drawLine(line);
-                    //vykreslování pomocí line snapping
-                    }else{
-                        lineRasterizer = new LineRasterizerThick(panel.getRaster());
-                        hPoint = snapping(new Point(startX, startY), new Point(e.getX(),e.getY()));
-                        Line line = new Line(startX, startY, hPoint.getX(), hPoint.getY());
-                        lineRasterizer.drawLine(line);
-                    }
-                //vykreslování polygonu
-                } else if (mode == 2) {
-                    //znovuvykreslování již nakreslených částí polygonu
-                    if(polygon.size()>=2)polygonRasterizer.rasterize(polygon);
-                    //nastavení rasterizace dle požadavku na tučnost
-                    if (thick){
-                        polygonRasterizer.setLineRasterizer(new LineRasterizerThick(panel.getRaster()));
-                    } else {
-                        polygonRasterizer.setLineRasterizer(new LineRasterizerTrivial(panel.getRaster()));
-                    }
-                    //vykreslení prvotní čáry (mezi prvními 2 body)
-                    if(polygon.size()<2) {
-                        Line line = new Line(startX, startY, e.getX(), e.getY());
-                        lineRasterizer.drawLine(line);
-                    //vykreslování čar po nakreslení první čáry
-                    }else {
-                        Line line = new Line(polygon.getPoint(0).getX(), polygon.getPoint(0).getY(), e.getX(), e.getY());
-                        lineRasterizer.drawLine(line);
-                        int pp = polygon.size(); //pp = Pomocná Proměnná
-                        Line line2 = new Line(polygon.getPoint(pp-1).getX(), polygon.getPoint(pp-1).getY(), e.getX(), e.getY());
-                        lineRasterizer.drawLine(line2);
-                    }
-                } else if (mode == 4) {
-                    Pentagon pentagon = new Pentagon();
-                    pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                    Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
-                    polygonRasterizer.rasterize(polygon);
+                    panel.repaint();
                 }
-                panel.repaint();
             }
         });
         panel.addKeyListener(new KeyListener() {

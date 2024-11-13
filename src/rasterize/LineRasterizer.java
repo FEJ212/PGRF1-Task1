@@ -16,6 +16,11 @@ public abstract class LineRasterizer {
         this.raster = raster;
         this.color = color;
     }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     //metoda pro vykreslení čáry
     public void drawLine(Line line){
 

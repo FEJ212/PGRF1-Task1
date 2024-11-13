@@ -18,6 +18,7 @@ import java.util.List;
 public class Controller2D {
     private final Panel panel;
     private SeedFiller seedFiller;
+    private ScanLineFiller scanLineFiller;
     private LineRasterizer lineRasterizer; //rasterizer čar
     private PolygonRasterizer polygonRasterizer; //rasterizer polygonů
     private PointRasterizer pointRasterizer; //rasterizer bodů
@@ -95,6 +96,10 @@ public class Controller2D {
                   }
                   if (mode == 2 && polygon.size() >= 3) {
                       polygonRasterizer.rasterize(polygon);
+                      if (scanline){
+                          scanLineFiller = new ScanLineFiller(polygon, lineRasterizer, polygonRasterizer);
+                          scanLineFiller.fill();
+                      }
                   }
                   //vykreslování úseček
                   if (mode == 1 || mode == 3) {

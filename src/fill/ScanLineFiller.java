@@ -15,17 +15,19 @@ public class ScanLineFiller implements Filler{
     private LineRasterizer lineRasterizer;
     private PolygonRasterizer polygonRasterizer;
     private Polygon polygon;
-    private ArrayList<Edge> edges = new ArrayList<>();
-    private ArrayList<Integer> intersections = new ArrayList<>();
+
 
     public ScanLineFiller(Polygon polygon, LineRasterizer lineRasterizer, PolygonRasterizer polygonRasterizer) {
         this.polygon = polygon;
         this.lineRasterizer = lineRasterizer;
         this.polygonRasterizer = polygonRasterizer;
+        lineRasterizer.setColor(0x69b00b);
     }
 
     @Override
     public void fill() {
+        ArrayList<Edge> edges = new ArrayList<>();
+        ArrayList<Integer> intersections = new ArrayList<>();
         for (int i = 0; i < polygon.size(); i++){
             Point p1 = polygon.getPoint(i);
             Point p2 = polygon.getPoint((i+1) % polygon.size());
@@ -41,7 +43,8 @@ public class ScanLineFiller implements Filler{
             if (edge.getY1() < yMin) yMin = edge.getY1();
             if (edge.getY2() > yMax) yMax = edge.getY2();
         }
-        for(int i = yMin; i < yMax; i++){
+        for(int i = yMin; i <= yMax; i++){
+            intersections.clear();
             for (Edge edge : edges) {
                 if(edge.isIntersection(i)){
                     intersections.add(edge.getIntersection(i));

@@ -1,7 +1,6 @@
 package render;
 
 import model.Line;
-import model.Point;
 import rasterize.LineRasterizer;
 import solid.Solid;
 

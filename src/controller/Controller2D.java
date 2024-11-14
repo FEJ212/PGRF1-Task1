@@ -31,7 +31,7 @@ public class Controller2D {
     private ArrayList<Point> pointsThick = new ArrayList<>(); //zaznamenávání nakreslených tučných bodů
     private boolean thick = false; //Hodnota pro přepínání mezi normálními a tlustými čarami
     private boolean snap = false; //Hodnota pro přepínání mezi normálním režimem, nebo režimem rovných čar
-    private boolean scanline = false;
+    private boolean scanline = true;
     private Point hPoint = new Point(0,0); //pomocná proměnná pro vypočítání sklonu pro line snapping => držení tlačítka shift
     private Line lineClipper;
     /*
@@ -319,12 +319,12 @@ public class Controller2D {
                         break;
                     case'f':
                         //přepnutí režimu a vypsání zprávy o provedení do konzole
-                        if (!scanline) {
-                            scanline = true;
-                            System.out.println("ScanLine on");
-                        } else {
+                        if (scanline) {
                             scanline = false;
                             System.out.println("ScanLine off");
+                        } else {
+                            scanline = true;
+                            System.out.println("ScanLine on");
                         }
                         break;
                     case'o':

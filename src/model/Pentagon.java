@@ -18,7 +18,6 @@ public class Pentagon extends Polygon{
         //výpočet vzdálenosti vrcholu od středu úsečky d
         float v = (float) Math.sqrt((a*a)-((d/2)*(d/2)));
         //výpočet vzdálenosti středu strany od středu úsečky d
-        float vNaDruhouStranu = h-v;
     }
     public Polygon getPolygon() {
         return polygon;

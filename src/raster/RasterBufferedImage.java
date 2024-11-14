@@ -20,7 +20,7 @@ public class RasterBufferedImage implements Raster{
     //getter barvy jednoho specifického pixelu
     @Override
     public int getPixel(int x, int y) {
-        return image.getRGB(x,y);
+        return image.getRGB(x,y) & 0x00ffffff;
     }
     //getter šířky Rasteru
     @Override

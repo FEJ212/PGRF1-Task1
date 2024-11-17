@@ -3,11 +3,13 @@ package Utils;
 import java.util.ArrayList;
 
 public class Sort {
+    //metoda pro prohození 2 elementů v poli
     public static void swapElemsArray(int [] pole, int i, int j){
         int tmp = pole[i];
         pole[i] = pole[j];
         pole[j] = tmp;
     }
+    //implementace BuubleSortu
     public static ArrayList bubbleSort(ArrayList arr) {
         int[] numbers = new int[arr.size()];
         ArrayList<Integer> aList = new ArrayList<>();

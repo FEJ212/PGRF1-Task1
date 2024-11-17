@@ -17,8 +17,8 @@ import java.util.List;
 //Třída pro uživatelské ovládání
 public class Controller2D {
     private final Panel panel;
-    private SeedFiller seedFiller;
-    private ScanLineFiller scanLineFiller;
+    private SeedFiller seedFiller; //vyplňování polygonu přes SeedFill
+    private ScanLineFiller scanLineFiller; //vyplňování polygonu přes ScaLine
     private LineRasterizer lineRasterizer; //rasterizer čar
     private PolygonRasterizer polygonRasterizer; //rasterizer polygonů
     private PointRasterizer pointRasterizer; //rasterizer bodů
@@ -31,7 +31,7 @@ public class Controller2D {
     private ArrayList<Point> pointsThick = new ArrayList<>(); //zaznamenávání nakreslených tučných bodů
     private boolean thick = false; //Hodnota pro přepínání mezi normálními a tlustými čarami
     private boolean snap = false; //Hodnota pro přepínání mezi normálním režimem, nebo režimem rovných čar
-    private boolean scanline = true;
+    private boolean scanline = true; //Hodnora pro zapínání a vypínání ScanLine vyplňování
     private Point hPoint = new Point(0,0); //pomocná proměnná pro vypočítání sklonu pro line snapping => držení tlačítka shift
     private Line lineClipper;
     /*
@@ -122,12 +122,16 @@ public class Controller2D {
                               lines.add(line);
                           }
                       }
+                  //vykreslení pentagonu
                   } else if (mode == 4) {
+                      //vytvoření instance
                       Pentagon pentagon = new Pentagon();
+                      //výpočet bodů
                       pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                      Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
-                      polygonRasterizer.rasterize(polygon);
-                      polygons.add(polygon);
+                      //vykreslení
+                      polygonRasterizer.rasterize(pentagon);
+                      //uložení pentagonu pro překreslování
+                      polygons.add(pentagon);
                   }
                   panel.repaint();
               }
@@ -138,7 +142,6 @@ public class Controller2D {
           }
         });
     }
-
     private void initListener(){
         panel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -213,12 +216,16 @@ public class Controller2D {
                             Line line2 = new Line(polygon.getPoint(pp - 1).getX(), polygon.getPoint(pp - 1).getY(), e.getX(), e.getY());
                             lineRasterizer.drawLine(line2);
                         }
+                    //vykreslování pentagonu
                     } else if (mode == 4) {
+                        //vytvoření instance pentagonu
                         Pentagon pentagon = new Pentagon();
+                        //výpočet bodů
                         pentagon.calculate(new Point(startX, startY), new Point(e.getX(), e.getY()));
-                        Polygon polygon = new Polygon(pentagon.getPolygon().getPoints());
-                        polygonRasterizer.rasterize(polygon);
+                        //vykreslení
+                        polygonRasterizer.rasterize(pentagon);
                     }
+                    //překreslení obrazovky
                     panel.repaint();
                 }
             }
@@ -317,8 +324,8 @@ public class Controller2D {
                         panel.clear();
                         panel.repaint();
                         break;
+                    //zapnutí/vypnutí vykreslování ScanLine
                     case'f':
-                        //přepnutí režimu a vypsání zprávy o provedení do konzole
                         if (scanline) {
                             scanline = false;
                             System.out.println("ScanLine off");
@@ -327,6 +334,7 @@ public class Controller2D {
                             System.out.println("ScanLine on");
                         }
                         break;
+                    //přepnutí na mód pentagonu
                     case'o':
                         if (thick){
                             polygonsThick.add(polygon);

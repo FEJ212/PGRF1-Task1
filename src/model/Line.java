@@ -1,6 +1,7 @@
 package model;
 
 import transforms.Point3D;
+import transforms.Vec3D;
 
 //vlastní datový typ pro zaznamenání všech potřebných hodnot k zaznamenání úsečky
 public class Line {
@@ -20,10 +21,16 @@ public class Line {
         this.y2 = b.getY();
     }
     public Line(Point3D a, Point3D b){
-        this.x1 = (int) a.getX();
-        this.y1 = (int) a.getY();
-        this.x2 = (int) b.getX();
-        this.y2 = (int) b.getY();
+        this.x1 = (int) Math.round(a.getX());
+        this.y1 = (int) Math.round(a.getY());
+        this.x2 = (int) Math.round(b.getX());
+        this.y2 = (int) Math.round(b.getY());
+    }
+    public Line(Vec3D a, Vec3D b){
+        this.x1 = (int) Math.round(a.getX());
+        this.y1 = (int) Math.round(a.getY());
+        this.x2 = (int) Math.round(b.getX());
+        this.y2 = (int) Math.round(b.getY());
     }
     //gettery
     public int getX1() {

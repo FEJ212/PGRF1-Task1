@@ -15,7 +15,7 @@ public class Controller3D {
 
     public Controller3D(Panel panel){
         this.panel = panel;
-        renderer = new Renderer(new LineRasterizerGraphics(panel.getRaster()));
+        renderer = new Renderer(new LineRasterizerGraphics(panel.getRaster()), panel.getWidth(), panel.getHeight());
 
         arrow = new Arrow();
 

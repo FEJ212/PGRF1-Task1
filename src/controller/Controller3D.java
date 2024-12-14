@@ -212,10 +212,10 @@ public class Controller3D {
             case KeyEvent.VK_Z:
                 solid.setModel(solid.rotateZ());
                 break;
-            case KeyEvent.VK_ADD:
+            case KeyEvent.VK_O:
                 solid.setModel(solid.zoomUp());
                 break;
-            case KeyEvent.VK_SUBTRACT:
+            case KeyEvent.VK_L:
                 solid.setModel(solid.zoomDown());
             break;
         }

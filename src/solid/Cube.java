@@ -1,5 +1,6 @@
 package solid;
 
+import transforms.Col;
 import transforms.Point3D;
 
 public class Cube extends Solid{
@@ -15,6 +16,8 @@ public class Cube extends Solid{
         addIndices(0, 1, 1, 2, 2, 3, 3, 0); // front face
         addIndices(4, 5, 5, 6, 6, 7, 7, 4); // back face
         addIndices(0, 4, 1, 5, 2, 6, 3, 7); // four side faces
+
+        color = new Col(0xFFFFFF);
     }
     @Override
     public String getIdentifier() {

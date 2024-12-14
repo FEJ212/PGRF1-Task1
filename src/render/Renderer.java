@@ -42,6 +42,7 @@ public class Renderer {
             Vec3D pointAInScreen = transformToScreen(new Vec3D(dehomA));
             Vec3D pointBInScreen = transformToScreen(new Vec3D(dehomB));
 
+            lineRasterizer.setColor(solid.getColor().getRGB());
             lineRasterizer.drawLine(new Line(pointAInScreen,pointBInScreen));
         }
     }

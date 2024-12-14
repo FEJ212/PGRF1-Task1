@@ -10,7 +10,7 @@ public abstract class Solid {
     protected List<Point3D> vb = new ArrayList<>();
     protected List<Integer> ib = new ArrayList<>();
     protected Mat4 model = new Mat4Identity();
-    protected Col color = new Col(0xffffff);
+    protected Col color;
 
     public List<Point3D> getVb() {
         return vb;

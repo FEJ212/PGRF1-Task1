@@ -1,5 +1,6 @@
 package solid;
 
+import transforms.Col;
 import transforms.Point3D;
 
 public class Tesseract extends Solid{
@@ -31,6 +32,8 @@ public class Tesseract extends Solid{
         addIndices(8, 12, 9, 13, 10, 14, 11, 15); // four inner side faces
 
         addIndices(0, 8, 1, 9, 2, 10, 3, 11, 4, 12, 5, 13, 6, 14, 7, 15); // inner and outer faces link
+
+        color = new Col(0xFFFFFF);
     }
     @Override
     public String getIdentifier() {

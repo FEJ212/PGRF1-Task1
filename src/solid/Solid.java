@@ -1,9 +1,6 @@
 package solid;
 
-import transforms.Col;
-import transforms.Mat4;
-import transforms.Mat4Identity;
-import transforms.Point3D;
+import transforms.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,5 +46,60 @@ public abstract class Solid {
 
     public void setIb(List<Integer> ib) {
         this.ib = ib;
+    }
+
+    public Mat4 increaseX(){
+        Mat4Transl mat = new Mat4Transl(new Vec3D(1,0,0));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 decreaseX(){
+        Mat4Transl mat = new Mat4Transl(new Vec3D(-1,0,0));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 increaseY(){
+        Mat4Transl mat = new Mat4Transl(new Vec3D(0,1,0));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 decreaseY(){
+        Mat4Transl mat = new Mat4Transl(new Vec3D(0,-1,0));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 increaseZ(){
+        Mat4Transl mat = new Mat4Transl(new Vec3D(0,0,1));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 decreaseZ(){
+        Mat4Transl mat = new Mat4Transl(new Vec3D(0,0,-1));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 rotateX(){
+        Mat4RotX mat = new Mat4RotX(Math.toRadians(1));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 rotateY(){
+        Mat4RotY mat = new Mat4RotY(Math.toRadians(1));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 rotateZ(){
+        Mat4RotZ mat = new Mat4RotZ(Math.toRadians(1));
+        return getModel().mul(mat);
+    }
+
+    public Mat4 zoomUp(){
+        Mat4Scale mat = new Mat4Scale(1.1);
+        return getModel().mul(mat);
+    }
+
+    public Mat4 zoomDown(){
+        Mat4Scale mat = new Mat4Scale(0.9);
+        return getModel().mul(mat);
     }
 }

@@ -136,8 +136,50 @@ public class Controller3D {
     }
     //vykreslování dříve vykreslených čar
     public void repaintCanvas(){
-        //clear(0x000000);
-
+        panel.clear();
+        renderer.setView(camera.getViewMatrix());
+        renderer.setProj(current);
+        //renderer.renderAxis(axisX, axisY, axisZ);
+        renderer.renderSolids(solids);
         panel.repaint();
+    }
+
+    public void processSolids(Solid solid, KeyEvent keyEvent){
+        switch (keyEvent.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                solid.setModel(solid.decreaseX());
+                break;
+            case KeyEvent.VK_RIGHT:
+                solid.setModel(solid.increaseX());
+                break;
+            case KeyEvent.VK_UP:
+                solid.setModel(solid.increaseY());
+                break;
+            case KeyEvent.VK_DOWN:
+                solid.setModel(solid.decreaseY());
+                break;
+            case KeyEvent.VK_SHIFT:
+                solid.setModel(solid.increaseZ());
+                break;
+            case KeyEvent.VK_CONTROL:
+                solid.setModel(solid.decreaseZ());
+                break;
+            case KeyEvent.VK_X:
+                solid.setModel(solid.rotateX());
+                break;
+            case KeyEvent.VK_Y:
+                solid.setModel(solid.rotateY());
+                break;
+            case KeyEvent.VK_Z:
+                solid.setModel(solid.rotateZ());
+                break;
+            case KeyEvent.VK_ADD:
+                solid.setModel(solid.zoomUp());
+                break;
+            case KeyEvent.VK_SUBTRACT:
+                solid.setModel(solid.zoomDown());
+            break;
+        }
+        repaintCanvas();
     }
 }

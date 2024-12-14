@@ -5,7 +5,6 @@ import render.Renderer;
 import solid.*;
 import transforms.*;
 import view.Panel;
-import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -14,7 +13,6 @@ public class Controller3D {
     private final Panel panel;
     private Renderer renderer;
     private ArrayList<Solid> solids;
-    private Arrow arrow;
     private Solid cube;
     private Solid tesseract;
     private Solid pyramid;
@@ -26,20 +24,12 @@ public class Controller3D {
     int editColor = 0xFF0000;
     private int selectedIndex = -1;
     private String objectId = "";
-    double translateX = 0;
-    double translateY = 0;
-    double translateZ = 0;
-    int scale = 0;
-    int rotate = 0;
 
     public Controller3D(Panel panel){
         this.panel = panel;
         renderer = new Renderer(new LineRasterizerGraphics(panel.getRaster()), panel.getRaster());
 
-        arrow = new Arrow();
-
         initListener();
-
         initScene();
 
         repaintCanvas();
@@ -165,6 +155,14 @@ public class Controller3D {
         cube = new Cube();
         tesseract = new Tesseract();
         pyramid = new Pyramid();
+
+        for (int i = 0; i<5; i++) tesseract.setModel(tesseract.increaseY());
+        for (int i = 0; i<2; i++){
+            cube.setModel(cube.increaseX());
+            cube.setModel(cube.increaseY());
+            tesseract.setModel(tesseract.decreaseX());
+        }
+        tesseract.setModel(tesseract.increaseZ());
 
         current = perspective;
         solids = new ArrayList<>();

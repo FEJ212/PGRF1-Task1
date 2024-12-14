@@ -102,4 +102,8 @@ public abstract class Solid {
         Mat4Scale mat = new Mat4Scale(0.9);
         return getModel().mul(mat);
     }
+
+    public String getIdentifier(){
+        return "DEFAULT";
+    }
 }

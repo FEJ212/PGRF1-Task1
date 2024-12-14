@@ -17,6 +17,7 @@ public class Controller3D {
     private Arrow arrow;
     private Solid cube;
     private Solid tesseract;
+    private Solid pyramid;
     private Axis axisX, axisY, axisZ;
     private Camera camera;
     private Mat4 perspective, orthogonal, current;
@@ -138,6 +139,9 @@ public class Controller3D {
                 if(objectId.equals("TESSERACT")){
                     processSolids(tesseract, e);
                 }
+                if(objectId.equals("PYRAMID")){
+                    processSolids(pyramid, e);
+                }
             }
             //vypnutí režimu line snapping po puštění tlačítka shift
             @Override
@@ -160,11 +164,13 @@ public class Controller3D {
 
         cube = new Cube();
         tesseract = new Tesseract();
+        pyramid = new Pyramid();
 
         current = perspective;
         solids = new ArrayList<>();
         solids.add(cube);
         solids.add(tesseract);
+        solids.add(pyramid);
         //objekty
     }
     //vykreslování dříve vykreslených čar

@@ -39,6 +39,8 @@ public class Controller3D {
 
         initListener();
 
+        initScene();
+
         repaintCanvas();
     }
 

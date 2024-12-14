@@ -15,11 +15,16 @@ public class Controller3D {
     private Renderer renderer;
     private ArrayList<Solid> solids;
     private Arrow arrow;
+    private Solid cube;
+    private Solid tesseract;
     private Axis axisX, axisY, axisZ;
     private Camera camera;
     private Mat4 perspective, orthogonal, current;
     private int startX, startY;
-
+    int outlineColor = 0xFFFFFF;
+    int editColor = 0xFF0000;
+    private int selectedIndex = -1;
+    private String objectId = "";
     double translateX = 0;
     double translateY = 0;
     double translateZ = 0;
@@ -107,8 +112,30 @@ public class Controller3D {
                         } else {
                             current = perspective;
                         }
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        if(selectedIndex != -1){
+                            solids.get(selectedIndex).setColor(outlineColor);
+                        }
+                        selectedIndex = (selectedIndex+1)%solids.size();
+                        solids.get(selectedIndex).setColor(editColor);
+                        objectId = solids.get(selectedIndex).getIdentifier();
+                        break;
+                    case KeyEvent.VK_BACK_SPACE:
+                        if (selectedIndex != -1){
+                            solids.get(selectedIndex).setColor(outlineColor);
+                            selectedIndex = -1;
+                            objectId = "";
+                        }
+                        break;
                 }
                 repaintCanvas();
+                if(objectId.equals("CUBE")){
+                    processSolids(cube, e);
+                }
+                if(objectId.equals("TESSERACT")){
+                    processSolids(tesseract, e);
+                }
             }
             //vypnutí režimu line snapping po puštění tlačítka shift
             @Override
@@ -129,8 +156,13 @@ public class Controller3D {
         axisZ = new Axis('z');
         axisZ.setColor(0x0000FF);
 
+        cube = new Cube();
+        tesseract = new Tesseract();
+
         current = perspective;
         solids = new ArrayList<>();
+        solids.add(cube);
+        solids.add(tesseract);
         //objekty
     }
     //vykreslování dříve vykreslených čar

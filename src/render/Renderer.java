@@ -3,7 +3,7 @@ package render;
 import model.Line;
 import raster.Raster;
 import rasterize.LineRasterizer;
-import solid.Solid;
+import solid.*;
 import transforms.*;
 
 import java.util.List;
@@ -64,11 +64,12 @@ public class Renderer {
     public void setProj(Mat4 proj) {
         this.proj = proj;
     }
-    /*public void renderAxis(Axis x, Axis y, Axis z){
+    public void renderAxis(Axis x, Axis y, Axis z){
         renderSolid(x);
         renderSolid(y);
         renderSolid(z);
-    }*/
+    }
+
     public boolean checkPoint(Point3D point){
         double x = point.getX();
         double y = point.getY();
@@ -76,4 +77,5 @@ public class Renderer {
         double w = point.getW();
         return -w <= x && x <= w && -w <= y && y <= w && 0 <= z && z <= w;
     }
+
 }

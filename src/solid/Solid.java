@@ -36,8 +36,8 @@ public abstract class Solid {
         return color;
     }
 
-    public void setColor(Col color) {
-        this.color = color;
+    public void setColor(int color) {
+        this.color = new Col(color);
     }
 
     public void setVb(List<Point3D> vb) {

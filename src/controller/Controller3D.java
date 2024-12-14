@@ -2,8 +2,7 @@ package controller;
 
 import rasterize.*;
 import render.Renderer;
-import solid.Arrow;
-import solid.Solid;
+import solid.*;
 import transforms.*;
 import view.Panel;
 import javax.swing.*;
@@ -16,7 +15,7 @@ public class Controller3D {
     private Renderer renderer;
     private ArrayList<Solid> solids;
     private Arrow arrow;
-    //private Axis axisX, axisY, axisZ;
+    private Axis axisX, axisY, axisZ;
     private Camera camera;
     private Mat4 perspective, orthogonal, current;
     private int startX, startY;
@@ -122,14 +121,14 @@ public class Controller3D {
         camera = new Camera(new Vec3D(0.5,-5,2.3),Math.toRadians(90),Math.toRadians(-15),10,true);
         perspective = new Mat4PerspRH(Math.PI/4,panel.getHeight()/(float)panel.getWidth(),0.1,20.);
         orthogonal = new Mat4OrthoRH((float)panel.getWidth()/100,(float)panel.getHeight()/100,0.1,20.);
-        /*
+
         axisX = new Axis('x');
         axisX.setColor(0xFF0000);
         axisY = new Axis('y');
         axisY.setColor(0x00FF00);
         axisZ = new Axis('z');
         axisZ.setColor(0x0000FF);
-         */
+
         current = perspective;
         solids = new ArrayList<>();
         //objekty
@@ -139,7 +138,7 @@ public class Controller3D {
         panel.clear();
         renderer.setView(camera.getViewMatrix());
         renderer.setProj(current);
-        //renderer.renderAxis(axisX, axisY, axisZ);
+        renderer.renderAxis(axisX, axisY, axisZ);
         renderer.renderSolids(solids);
         panel.repaint();
     }
